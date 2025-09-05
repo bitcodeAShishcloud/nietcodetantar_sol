@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriAI - Smart Crop Monitoring Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-seedling"></i>
+                <span>AgriAI Platform</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#monitoring" class="nav-link">Monitoring</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+                <a href="#alerts" class="nav-link">Alerts</a>
+                <a href="#reports" class="nav-link">Reports</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/32" alt="Profile">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <main class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Field Overview</h3>
+                <div class="field-selector">
+                    <select id="fieldSelect">
+                        <option value="field1">North Field (25 acres)</option>
+                        <option value="field2">South Field (18 acres)</option>
+                        <option value="field3">East Field (32 acres)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Health Metrics</h3>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-leaf"></i>
+                        <span>Crop Health</span>
+                    </div>
+                    <div class="metric-value good">87%</div>
+                    <div class="metric-trend up">+2.3% from last week</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-tint"></i>
+                        <span>Soil Moisture</span>
+                    </div>
+                    <div class="metric-value normal">72%</div>
+                    <div class="metric-trend stable">Optimal range</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-bug"></i>
+                        <span>Pest Risk</span>
+                    </div>
+                    <div class="metric-value warning">Medium</div>
+                    <div class="metric-trend attention">Monitor closely</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Recent Alerts</h3>
+                <div class="alert-list">
+                    <div class="alert-item high">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <div class="alert-title">Disease Risk Detected</div>
+                            <div class="alert-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="alert-item medium">
+                        <i class="fas fa-thermometer-half"></i>
+                        <div>
+                            <div class="alert-title">Temperature Stress</div>
+                            <div class="alert-time">5 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="alert-item low">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <div class="alert-title">Irrigation Recommended</div>
+                            <div class="alert-time">1 day ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Header Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">94.2%</div>
+                        <div class="stat-label">Overall Health Score</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Monitoring Points</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">15 min</div>
+                        <div class="stat-label">Last Update</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Active Satellites</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map and Analysis Section -->
+            <div class="analysis-grid">
+                <div class="map-container">
+                    <div class="panel-header">
+                        <h2>Field Health Map</h2>
+                        <div class="map-controls">
+                            <button class="btn-control active" data-layer="health">Health Index</button>
+                            <button class="btn-control" data-layer="moisture">Soil Moisture</button>
+                            <button class="btn-control" data-layer="temp">Temperature</button>
+                            <button class="btn-control" data-layer="ndvi">NDVI</button>
+                        </div>
+                    </div>
+                    <div id="field-map"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <div class="legend-color excellent"></div>
+                            <span>Excellent (90-100%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color good"></div>
+                            <span>Good (75-89%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color fair"></div>
+                            <span>Fair (60-74%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color poor"></div>
+                            <span>Poor (0-59%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-panel">
+                        <div class="panel-header">
+                            <h3>Vegetation Health Trends</h3>
+                            <select class="time-selector">
+                                <option value="7d">Last 7 days</option>
+                                <option value="30d">Last 30 days</option>
+                                <option value="90d">Last 90 days</option>
+                            </select>
+                        </div>
+                        <canvas id="healthChart"></canvas>
+                    </div>
+
+                    <div class="chart-panel">
+                        <div class="panel-header">
+                            <h3>Environmental Conditions</h3>
+                            <div class="env-tabs">
+                                <button class="tab-btn active" data-tab="moisture">Moisture</button>
+                                <button class="tab-btn" data-tab="temp">Temperature</button>
+                                <button class="tab-btn" data-tab="humidity">Humidity</button>
+                            </div>
+                        </div>
+                        <canvas id="environmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spectral Analysis Section -->
+            <div class="spectral-section">
+                <div class="panel-header">
+                    <h2>Hyperspectral Analysis</h2>
+                    <button class="btn-analyze">
+                        <i class="fas fa-microscope"></i>
+                        Run Analysis
+                    </button>
+                </div>
+                <div class="spectral-grid">
+                    <div class="spectral-chart">
+                        <h4>Spectral Signature</h4>
+                        <canvas id="spectralChart"></canvas>
+                    </div>
+                    <div class="index-values">
+                        <h4>Vegetation Indices</h4>
+                        <div class="index-grid">
+                            <div class="index-item">
+                                <span class="index-name">NDVI</span>
+                                <span class="index-value">0.78</span>
+                            </div>
+                            <div class="index-item">
+                                <span class="index-name">EVI</span>
+                                <span class="index-value">0.65</span>
+                            </div>
+                            <div class="index-item">
+                                <span class="index-name">SAVI</span>
+                                <span class="index-value">0.72</span>
+                            </div>
+                            <div class="index-item">
+                                <span class="index-name">NDRE</span>
+                                <span class="index-value">0.34</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-insights">
+                        <h4>AI Insights</h4>
+                        <div class="insight-list">
+                            <div class="insight-item">
+                                <i class="fas fa-brain"></i>
+                                <span>Crop stress detected in zones 3-5, likely due to water deficit</span>
+                            </div>
+                            <div class="insight-item">
+                                <i class="fas fa-leaf"></i>
+                                <span>Chlorophyll content is 12% below optimal in northern section</span>
+                            </div>
+                            <div class="insight-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Early signs of fungal infection risk in high humidity areas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prediction Section -->
+            <div class="prediction-section">
+                <div class="panel-header">
+                    <h2>AI Predictions & Recommendations</h2>
+                </div>
+                <div class="prediction-grid">
+                    <div class="prediction-card">
+                        <div class="prediction-header">
+                            <i class="fas fa-chart-area"></i>
+                            <h4>7-Day Yield Forecast</h4>
+                        </div>
+                        <div class="prediction-content">
+                            <div class="forecast-value">+2.3%</div>
+                            <div class="forecast-trend">Above seasonal average</div>
+                            <div class="confidence">Confidence: 87%</div>
+                        </div>
+                    </div>
+                    <div class="prediction-card">
+                        <div class="prediction-header">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Disease Risk Assessment</h4>
+                        </div>
+                        <div class="prediction-content">
+                            <div class="risk-level medium">Medium Risk</div>
+                            <div class="risk-type">Powdery Mildew</div>
+                            <div class="risk-timeline">Peak risk: 3-4 days</div>
+                        </div>
+                    </div>
+                    <div class="prediction-card">
+                        <div class="prediction-header">
+                            <i class="fas fa-tint"></i>
+                            <h4>Irrigation Recommendation</h4>
+                        </div>
+                        <div class="prediction-content">
+                            <div class="irrigation-action">Increase by 15%</div>
+                            <div class="irrigation-zones">Zones 2, 4, 7</div>
+                            <div class="irrigation-timing">Next 24-48 hours</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Alert Modal -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Critical Alert</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="alert-details">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-info">
+                        <h4 id="alertTitle">Disease Risk Detected</h4>
+                        <p id="alertDescription">High probability of fungal infection in Field Section C. Immediate attention recommended.</p>
+                        <div class="alert-meta">
+                            <span>Confidence: 89%</span>
+                            <span>Priority: High</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-actions">
+                    <button class="btn-primary">View Details</button>
+                    <button class="btn-secondary">Mark as Reviewed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="app.js"></script>
+</body>
+</html>
