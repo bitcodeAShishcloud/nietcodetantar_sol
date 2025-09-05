@@ -124,7 +124,7 @@ class AgricultureServer {
         this.app.post('/api/analysis/hyperspectral', this.handleHyperspectralAnalysis.bind(this));
         
         // AI prediction endpoints
-        this.app.post('/api/predictions/disease', this.handleDiseaseprediction.bind(this));
+        this.app.post('/api/predictions/disease', this.handleDiseasePrediction.bind(this));
         this.app.post('/api/predictions/yield', this.handleYieldPrediction.bind(this));
         this.app.post('/api/predictions/stress', this.handleStressPrediction.bind(this));
 
@@ -279,7 +279,7 @@ class AgricultureServer {
     }
 
     // AI prediction handlers
-    async handleDiseasePredicti on(req, res) {
+    async handleDiseasePrediction(req, res) {
         try {
             const { imageData, environmentalData, fieldId } = req.body;
             
